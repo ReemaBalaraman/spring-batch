@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -552,7 +552,7 @@ public class CommandLineJobRunner {
 			}
 		}
 
-		Set<String> opts = new HashSet<String>();
+		Set<String> opts = new LinkedHashSet<String>();
 		List<String> params = new ArrayList<String>();
 
 		int count = 0;
