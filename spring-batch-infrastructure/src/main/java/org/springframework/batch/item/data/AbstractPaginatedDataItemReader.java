@@ -93,9 +93,11 @@ AbstractItemCountingItemStreamItemReader<T> {
 	protected void doOpen() throws Exception {
 	}
 
-	@Override
-	protected void doClose() throws Exception {
-	}
+	/**
+	 * Close the resources opened in {@link #doOpen()}.
+	 * @throws Exception Allows subclasses to throw checked exceptions for interpretation by the framework
+	 */
+	protected abstract void doClose() throws Exception;
 
 	@Override
 	protected void jumpToItem(int itemLastIndex) throws Exception {

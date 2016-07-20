@@ -76,6 +76,7 @@ public class MongoItemReader<T> extends AbstractPaginatedDataItemReader<T> imple
 	private String fields;
 	private String collection;
 	private List<Object> parameterValues;
+	private Object lock = new Object();
 
 	public MongoItemReader() {
 		super();
@@ -186,6 +187,14 @@ public class MongoItemReader<T> extends AbstractPaginatedDataItemReader<T> imple
 			return (Iterator<T>) template.find(mongoQuery, type, collection).iterator();
 		} else {
 			return (Iterator<T>) template.find(mongoQuery, type).iterator();
+		}
+	}
+
+	@Override
+	protected void doClose() throws Exception {
+		synchronized (lock) {
+			page = 0;
+			results = null;
 		}
 	}
 
