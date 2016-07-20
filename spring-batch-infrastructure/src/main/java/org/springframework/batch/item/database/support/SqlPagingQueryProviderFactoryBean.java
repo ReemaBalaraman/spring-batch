@@ -32,6 +32,7 @@ import static org.springframework.batch.support.DatabaseType.SYBASE;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.lang.reflect.Field;
 
 import javax.sql.DataSource;
 
@@ -164,11 +165,26 @@ public class SqlPagingQueryProviderFactoryBean implements FactoryBean<PagingQuer
 		}
 
 		AbstractSqlPagingQueryProvider provider = providers.get(type);
+
+		Field providerField = this.getClass().getDeclaredField("providers");
+		providerField.setAccessible(true);
+		providers = (Map) providerField.get(this);
+		providerField.setAccessible(false);
+		providers.put(DatabaseType.MYSQL, new MySqlPagingQueryProvider() {
+			@Override
+			public Map<String, Order> getSortKeysWithoutAliases() {
+				return super.getSortKeys();
+			}
+		});
+
 		Assert.state(provider!=null, "Should not happen: missing PagingQueryProvider for DatabaseType="+type);
 
+		provider = providers.get(type);
 		provider.setFromClause(fromClause);
 		provider.setWhereClause(whereClause);
 		provider.setSortKeys(sortKeys);
+
+
 		if (StringUtils.hasText(selectClause)) {
 			provider.setSelectClause(selectClause);
 		}
