@@ -85,9 +85,20 @@ public class SqlPagingQueryProviderFactoryBeanTests {
 		factory.setWhereClause("x=y");
 		PagingQueryProvider provider = factory.getObject();
 		String query = provider.generateFirstPageQuery(100);
-		assertTrue("Wrong query: "+query, query.contains("x=y"));
+		assertTrue("Wrong query: " + query, query.contains("x=y"));
 	}
 
+	@Test
+	public void testJoinQuery() throws Exception {
+		factory.setFromClause("FROM temp_table AS t1 " +
+				"JOIN temp_table AS t2 " +
+				"ON t1.field_one = t2.field_two");
+		PagingQueryProvider provider = factory.getObject();
+		String query = provider.generateFirstPageQuery(100);
+		assertTrue("Wrong query: "+query, query.contains("FROM temp_table AS t1 " +
+				"JOIN temp_table AS t2 " +
+				"ON t1.field_one = t2.field_two"));
+	}
 	@Test
 	public void testAscending() throws Exception {
 		PagingQueryProvider provider = factory.getObject();
