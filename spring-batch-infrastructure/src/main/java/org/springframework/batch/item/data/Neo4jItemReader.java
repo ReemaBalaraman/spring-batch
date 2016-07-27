@@ -57,7 +57,9 @@ public class Neo4jItemReader<T> extends AbstractNeo4jItemReader {
 	public void setResultConverter(ResultConverter<Map<String, Object>, T> resultConverter) {
 		this.resultConverter = resultConverter;
 	}
-
+	@Override
+	protected void doClose() throws Exception {
+	}
 	@Override
 	protected Iterator<T> doPageRead() {
 		Result<Map<String, Object>> queryResults = getTemplate().query(
